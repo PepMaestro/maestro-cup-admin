@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maestro Cup — Panel Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-crown">♛</span>
+    <div class="brand-text">
+      <h1>Maestro Cup <span class="admin-tag">ADMIN</span></h1>
+      <span class="brand-sub">Panel de gestion du tournoi</span>
+    </div>
+  </div>
+  <div class="header-actions">
+    <span id="user-email"></span>
+    <button id="logout-btn" class="btn-ghost" style="display:none">Se déconnecter</button>
+  </div>
+</header>
+
+<!-- Login -->
+<section id="login-screen" class="login-screen">
+  <form id="login-form" class="login-card">
+    <h2>Connexion admin</h2>
+    <p class="hint">Utilise le compte créé dans Firebase Authentication.</p>
+    <label>Email
+      <input type="email" id="login-email" required autocomplete="username" />
+    </label>
+    <label>Mot de passe
+      <input type="password" id="login-password" required autocomplete="current-password" />
+    </label>
+    <button type="submit" class="btn-primary">Se connecter</button>
+    <p id="login-error" class="error-msg"></p>
+  </form>
+</section>
+
+<!-- App -->
+<div id="app-screen" style="display:none">
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="live">Matchs en direct</button>
+    <button class="tab-btn" data-tab="poules">Matchs de poule</button>
+    <button class="tab-btn" data-tab="penalites">Pénalités</button>
+    <button class="tab-btn" data-tab="finale">Phase finale</button>
+    <button class="tab-btn" data-tab="setup">Initialisation</button>
+  </nav>
+
+  <main>
+
+    <section id="tab-live" class="tab-panel active">
+      <p class="section-hint">Sélectionne les matchs actuellement en cours. Un match "en direct" apparaît en tête du site public.</p>
+      <div id="live-list" class="admin-matches"></div>
+    </section>
+
+    <section id="tab-poules" class="tab-panel">
+      <div class="journee-switch" id="journee-switch"></div>
+      <div id="poules-list" class="admin-matches"></div>
+    </section>
+
+    <section id="tab-penalites" class="tab-panel">
+      <p class="section-hint">Applique une pénalité (points retirés au classement de poule) à une équipe.</p>
+      <div id="penalites-list" class="penalites-list"></div>
+    </section>
+
+    <section id="tab-finale" class="tab-panel">
+      <p class="section-hint">Les équipes qualifiées apparaissent automatiquement une fois les poules terminées. Renseigne juste les scores.</p>
+      <div id="bracket-admin"></div>
+    </section>
+
+    <section id="tab-setup" class="tab-panel">
+      <div class="setup-card">
+        <h3>Initialiser les données du tournoi</h3>
+        <p class="section-hint">
+          À utiliser une seule fois, avant le début du tournoi : crée les 16 équipes et les 24 matchs de poule dans Firestore.
+          Si des données existent déjà, cette action ne fera rien pour éviter d'écraser des scores en cours.
+        </p>
+        <button id="init-btn" class="btn-primary">Initialiser les données</button>
+        <p id="init-status" class="hint"></p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script type="module" src="admin.js"></script>
+</body>
+</html>
