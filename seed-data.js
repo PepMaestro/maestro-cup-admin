@@ -23,11 +23,19 @@ export const TEAMS = [
   { id: "toyunited",     name: "Toy United",      nation: "Colombie",            flag: "🇨🇴", poule: "D" },
 ];
 
-// Heures par défaut des créneaux d'une journée (1er match 19h, puis +30min).
-// Modifiable ensuite depuis le panel admin.
-const SLOT_TIMES = ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"];
+// Heure de coup d'envoi de chaque journée : tous les matchs d'une même
+// journée démarrent en même temps (ils se jouent en parallèle sur des
+// consoles différentes), pas les uns après les autres.
+export const JOURNEE_TIMES = { j1: "19:00", j2: "19:30", j3: "20:00" };
 
-// order = position du match dans la journée (0 à 7), sert à déterminer l'heure.
+// Heures de la phase finale (également communes à tous les matchs du tour).
+export const BRACKET_TIMES = {
+  qf1: "20:30", qf2: "20:30", qf3: "20:30", qf4: "20:30",
+  sf1: "21:00", sf2: "21:00",
+  final: "21:30",
+};
+
+// order = position du match dans la journée (0 à 7), sert uniquement de repère d'affichage.
 const RAW_MATCHES = {
   j1: [
     ["A", "fcbridje", "maestroland"],
@@ -70,7 +78,7 @@ export function buildMatches() {
         journee,
         poule: m[0],
         order: idx,
-        time: SLOT_TIMES[idx],
+        time: JOURNEE_TIMES[journee],
         teamA: m[1],
         teamB: m[2],
         scoreA: null,

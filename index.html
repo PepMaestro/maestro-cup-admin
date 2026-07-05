@@ -20,6 +20,8 @@
     </div>
   </div>
   <div class="header-actions">
+    <span id="last-sync" class="last-sync"></span>
+    <button id="refresh-btn" class="btn-ghost" style="display:none">Rafraîchir</button>
     <span id="user-email"></span>
     <button id="logout-btn" class="btn-ghost" style="display:none">Se déconnecter</button>
   </div>
@@ -75,6 +77,20 @@
     </section>
 
     <section id="tab-setup" class="tab-panel">
+
+      <div class="setup-card">
+        <h3>Statut du tournoi</h3>
+        <p class="section-hint">
+          Tant que le tournoi est marqué "inactif", le site public affiche un message d'attente et ne charge aucune
+          donnée — ça évite de consommer des lectures Firestore pour rien avant le début de la compétition.
+          Active-le juste avant le coup d'envoi.
+        </p>
+        <label class="toggle-row">
+          <input type="checkbox" id="active-toggle" />
+          <span id="active-label">Tournoi inactif</span>
+        </label>
+      </div>
+
       <div class="setup-card">
         <h3>Initialiser les données du tournoi</h3>
         <p class="section-hint">
@@ -84,6 +100,17 @@
         <button id="init-btn" class="btn-primary">Initialiser les données</button>
         <p id="init-status" class="hint"></p>
       </div>
+
+      <div class="setup-card danger">
+        <h3>Réinitialiser (tout effacer)</h3>
+        <p class="section-hint">
+          Supprime définitivement toutes les équipes, tous les matchs et l'arbre de phase finale dans Firestore
+          (utile après un test, pour repartir de zéro). Cette action est irréversible.
+        </p>
+        <button id="reset-btn" class="btn-danger">Réinitialiser toutes les données</button>
+        <p id="reset-status" class="hint"></p>
+      </div>
+
     </section>
 
   </main>

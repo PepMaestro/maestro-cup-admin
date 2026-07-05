@@ -1,28 +1,33 @@
 import { firebaseConfig } from "./firebase-config.js";
-import { buildBracketView, poulesTerminees, BRACKET_DEF } from "./logic.js";
-import { TEAMS as SEED_TEAMS, buildMatches } from "./seed-data.js";
+import { buildBracketView, BRACKET_DEF } from "./logic.js";
+import { TEAMS as SEED_TEAMS, buildMatches, BRACKET_TIMES } from "./seed-data.js";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
-  getFirestore, collection, onSnapshot, doc, updateDoc, setDoc, getDocs, writeBatch,
+  getFirestore, collection, doc, updateDoc, setDoc, getDoc, getDocs, writeBatch, deleteDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const POLL_INTERVAL_MS = 60_000;
+
 let TEAMS = [];
 let MATCHES = [];
 let BRACKET = {};
+let META = { tournamentActive: false };
 let currentJournee = "j1";
+let pollTimer = null;
 
 /* ---------------- Auth ---------------- */
 const loginScreen = document.getElementById("login-screen");
 const appScreen = document.getElementById("app-screen");
 const logoutBtn = document.getElementById("logout-btn");
+const refreshBtn = document.getElementById("refresh-btn");
 const userEmailEl = document.getElementById("user-email");
 
 onAuthStateChanged(auth, (user) => {
@@ -30,13 +35,16 @@ onAuthStateChanged(auth, (user) => {
     loginScreen.style.display = "none";
     appScreen.style.display = "block";
     logoutBtn.style.display = "inline-block";
+    refreshBtn.style.display = "inline-block";
     userEmailEl.textContent = user.email;
-    startListeners();
+    startPolling();
   } else {
     loginScreen.style.display = "flex";
     appScreen.style.display = "none";
     logoutBtn.style.display = "none";
+    refreshBtn.style.display = "none";
     userEmailEl.textContent = "";
+    stopPolling();
   }
 });
 
@@ -54,6 +62,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 });
 
 logoutBtn.addEventListener("click", () => signOut(auth));
+refreshBtn.addEventListener("click", () => fetchAll());
 
 /* ---------------- Tabs ---------------- */
 document.querySelectorAll(".tab-btn").forEach((btn) => {
@@ -65,30 +74,49 @@ document.querySelectorAll(".tab-btn").forEach((btn) => {
   });
 });
 
-/* ---------------- Firestore listeners ---------------- */
-let listenersStarted = false;
-function startListeners() {
-  if (listenersStarted) return;
-  listenersStarted = true;
+/* ---------------- Polling (au lieu du temps réel) ----------------
+   Le panel admin est utilisé par une seule personne : on interroge Firestore
+   toutes les 60 secondes, plus un bouton "Rafraîchir" pour forcer une mise à
+   jour immédiate. Chaque action (score, statut, pénalité...) met aussi à jour
+   l'affichage localement tout de suite, sans attendre le prochain sondage. */
+function startPolling() {
+  fetchAll();
+  stopPolling();
+  pollTimer = setInterval(fetchAll, POLL_INTERVAL_MS);
+}
+function stopPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = null;
+}
 
-  onSnapshot(collection(db, "teams"), (snap) => {
-    TEAMS = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    renderAll();
-  });
-
-  onSnapshot(collection(db, "matches"), (snap) => {
-    MATCHES = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    renderAll();
-  });
-
-  onSnapshot(collection(db, "bracket"), (snap) => {
+async function fetchAll() {
+  try {
+    const [teamsSnap, matchesSnap, bracketSnap, metaSnap] = await Promise.all([
+      getDocs(collection(db, "teams")),
+      getDocs(collection(db, "matches")),
+      getDocs(collection(db, "bracket")),
+      getDoc(doc(db, "meta", "state")),
+    ]);
+    TEAMS = teamsSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    MATCHES = matchesSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
     BRACKET = {};
-    snap.docs.forEach((d) => { BRACKET[d.id] = d.data(); });
+    bracketSnap.docs.forEach((d) => { BRACKET[d.id] = d.data(); });
+    META = metaSnap.exists() ? metaSnap.data() : { tournamentActive: false };
     renderAll();
-  });
+    setLastSync();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function setLastSync() {
+  const el = document.getElementById("last-sync");
+  const now = new Date();
+  el.textContent = `Synchronisé à ${now.toLocaleTimeString("fr-FR")}`;
 }
 
 function renderAll() {
+  renderActiveToggle();
   if (!TEAMS.length && !MATCHES.length) return;
   renderLiveList();
   renderJourneeSwitch();
@@ -102,23 +130,48 @@ const teamsById = () => Object.fromEntries(TEAMS.map((t) => [t.id, t]));
 
 async function updateMatchStatus(matchId, status) {
   await updateDoc(doc(db, "matches", matchId), { status });
+  const m = MATCHES.find((x) => x.id === matchId);
+  if (m) m.status = status;
+  renderAll();
 }
 async function updateMatchScore(matchId, scoreA, scoreB) {
   await updateDoc(doc(db, "matches", matchId), { scoreA, scoreB });
+  const m = MATCHES.find((x) => x.id === matchId);
+  if (m) { m.scoreA = scoreA; m.scoreB = scoreB; }
+  renderAll();
 }
 async function updateBracketMatch(key, fields) {
   await setDoc(doc(db, "bracket", key), fields, { merge: true });
+  BRACKET[key] = { ...BRACKET[key], ...fields };
+  renderAll();
 }
 async function updateTeamPenalty(teamId, penalty) {
   await updateDoc(doc(db, "teams", teamId), { penalty });
+  const t = TEAMS.find((x) => x.id === teamId);
+  if (t) t.penalty = penalty;
+  renderAll();
 }
 
-function statusButtons(m, onChange) {
+function statusButtons(m) {
   return ["upcoming", "live", "finished"].map((s) => {
     const label = { upcoming: "À venir", live: "Live", finished: "Terminé" }[s];
     return `<button class="btn-status ${m.status === s ? "selected " + s : ""}" data-status="${s}" data-match="${m.id}">${label}</button>`;
   }).join("");
 }
+
+/* ---------------- Statut du tournoi ---------------- */
+function renderActiveToggle() {
+  const toggle = document.getElementById("active-toggle");
+  const label = document.getElementById("active-label");
+  toggle.checked = !!META.tournamentActive;
+  label.textContent = META.tournamentActive ? "Tournoi actif (visible sur le site public)" : "Tournoi inactif (site public en attente)";
+}
+document.getElementById("active-toggle").addEventListener("change", async (e) => {
+  const val = e.target.checked;
+  await setDoc(doc(db, "meta", "state"), { tournamentActive: val }, { merge: true });
+  META.tournamentActive = val;
+  renderActiveToggle();
+});
 
 /* ---------------- Live tab (toutes journées, statut rapide) ---------------- */
 function renderLiveList() {
@@ -270,6 +323,7 @@ function renderBracketAdmin() {
 
 function renderBracketAdminMatch(m) {
   const bothResolved = m.teamA.resolved && m.teamB.resolved;
+  const time = BRACKET_TIMES[m.key] || "";
   const statusBtns = ["upcoming", "live", "finished"].map((s) => {
     const label = { upcoming: "À venir", live: "Live", finished: "Terminé" }[s];
     return `<button class="btn-status ${m.status === s ? "selected " + s : ""}" data-status="${s}" data-bracket="${m.key}" ${bothResolved ? "" : "disabled"}>${label}</button>`;
@@ -277,7 +331,7 @@ function renderBracketAdminMatch(m) {
 
   return `
     <div class="admin-match">
-      <div class="admin-match-head"><span>${m.label}</span></div>
+      <div class="admin-match-head"><span>${m.label} · ${time}</span></div>
       <div class="admin-match-teams">
         <span class="team-label">${m.teamA.flag ? m.teamA.flag + " " : ""}${m.teamA.name}</span>
         <input type="number" min="0" class="score-input" id="bscoreA-${m.key}" value="${m.scoreA ?? ""}" placeholder="-" ${bothResolved ? "" : "disabled"} />
@@ -309,10 +363,38 @@ document.getElementById("init-btn").addEventListener("click", async () => {
     Object.keys(BRACKET_DEF).forEach((key) => {
       batch.set(doc(db, "bracket", key), { teamA: null, teamB: null, scoreA: null, scoreB: null, status: "upcoming" });
     });
+    batch.set(doc(db, "meta", "state"), { tournamentActive: false }, { merge: true });
     await batch.commit();
     statusEl.textContent = "Données initialisées avec succès : 16 équipes et 24 matchs de poule créés.";
+    fetchAll();
   } catch (err) {
     console.error(err);
     statusEl.textContent = "Erreur pendant l'initialisation — vérifie ta configuration Firebase et les règles Firestore.";
+  }
+});
+
+/* ---------------- Réinitialisation (tout effacer) ---------------- */
+document.getElementById("reset-btn").addEventListener("click", async () => {
+  const statusEl = document.getElementById("reset-status");
+  const confirmed = confirm(
+    "Cette action va supprimer définitivement toutes les équipes, tous les matchs et l'arbre de phase finale. Continuer ?"
+  );
+  if (!confirmed) return;
+
+  statusEl.textContent = "Suppression en cours…";
+  try {
+    const [teamsSnap, matchesSnap, bracketSnap] = await Promise.all([
+      getDocs(collection(db, "teams")),
+      getDocs(collection(db, "matches")),
+      getDocs(collection(db, "bracket")),
+    ]);
+    const allDocs = [...teamsSnap.docs, ...matchesSnap.docs, ...bracketSnap.docs];
+    await Promise.all(allDocs.map((d) => deleteDoc(d.ref)));
+    await setDoc(doc(db, "meta", "state"), { tournamentActive: false }, { merge: true });
+    statusEl.textContent = `Toutes les données ont été supprimées (${allDocs.length} documents). Tu peux relancer "Initialiser les données".`;
+    fetchAll();
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = "Erreur pendant la réinitialisation — vérifie les règles Firestore.";
   }
 });
