@@ -277,6 +277,7 @@ function renderPenalites() {
 function renderBracketAdmin() {
   const { bracket } = buildBracketView(TEAMS, MATCHES, BRACKET);
   const rounds = [
+    { title: "Huitièmes de finale", keys: ["hf1", "hf2", "hf3", "hf4", "hf5", "hf6", "hf7", "hf8"] },
     { title: "Quarts de finale", keys: ["qf1", "qf2", "qf3", "qf4"] },
     { title: "Demi-finales", keys: ["sf1", "sf2"] },
     { title: "Finale", keys: ["final"] },
@@ -365,7 +366,7 @@ document.getElementById("init-btn").addEventListener("click", async () => {
     });
     batch.set(doc(db, "meta", "state"), { tournamentActive: false }, { merge: true });
     await batch.commit();
-    statusEl.textContent = "Données initialisées avec succès : 16 équipes et 24 matchs de poule créés.";
+    statusEl.textContent = "Données initialisées avec succès : 32 équipes et 48 matchs de poule créés.";
     fetchAll();
   } catch (err) {
     console.error(err);

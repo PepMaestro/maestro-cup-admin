@@ -1,6 +1,12 @@
 // Données initiales de la Maestro Cup FC26
 // Utilisées uniquement par le panel admin pour initialiser Firestore.
 
+// ⚠️ IMPORTANT : les 16 équipes des poules E, F, G et H ci-dessous sont des
+// PLACEHOLDERS (noms/nations/drapeaux à remplacer). Édite-les avec les vraies
+// équipes AVANT de cliquer sur "Initialiser les données" dans le panel admin.
+// Tu peux changer name / nation / flag librement, mais garde les `id` uniques
+// (ou change-les aussi, du moment qu'ils restent uniques et cohérents avec
+// les ids utilisés dans RAW_MATCHES ci-dessous).
 export const TEAMS = [
   { id: "fcbridje",      name: "FC Bridje",       nation: "Paraguay",            flag: "🇵🇾", poule: "A" },
   { id: "maestroland",   name: "Maestroland",     nation: "Australie",           flag: "🇦🇺", poule: "A" },
@@ -21,6 +27,30 @@ export const TEAMS = [
   { id: "zgueginofc",    name: "Zguegino FC",     nation: "Irlande",             flag: "🇮🇪", poule: "D" },
   { id: "seven",         name: "7EVEN",           nation: "Espagne",             flag: "🇪🇸", poule: "D" },
   { id: "toyunited",     name: "Toy United",      nation: "Colombie",            flag: "🇨🇴", poule: "D" },
+
+  // ---- POULE E (PLACEHOLDER — à renommer) ----
+  { id: "teame1", name: "Équipe E1", nation: "?", flag: "🏳️", poule: "E" },
+  { id: "teame2", name: "Équipe E2", nation: "?", flag: "🏳️", poule: "E" },
+  { id: "teame3", name: "Équipe E3", nation: "?", flag: "🏳️", poule: "E" },
+  { id: "teame4", name: "Équipe E4", nation: "?", flag: "🏳️", poule: "E" },
+
+  // ---- POULE F (PLACEHOLDER — à renommer) ----
+  { id: "teamf1", name: "Équipe F1", nation: "?", flag: "🏳️", poule: "F" },
+  { id: "teamf2", name: "Équipe F2", nation: "?", flag: "🏳️", poule: "F" },
+  { id: "teamf3", name: "Équipe F3", nation: "?", flag: "🏳️", poule: "F" },
+  { id: "teamf4", name: "Équipe F4", nation: "?", flag: "🏳️", poule: "F" },
+
+  // ---- POULE G (PLACEHOLDER — à renommer) ----
+  { id: "teamg1", name: "Équipe G1", nation: "?", flag: "🏳️", poule: "G" },
+  { id: "teamg2", name: "Équipe G2", nation: "?", flag: "🏳️", poule: "G" },
+  { id: "teamg3", name: "Équipe G3", nation: "?", flag: "🏳️", poule: "G" },
+  { id: "teamg4", name: "Équipe G4", nation: "?", flag: "🏳️", poule: "G" },
+
+  // ---- POULE H (PLACEHOLDER — à renommer) ----
+  { id: "teamh1", name: "Équipe H1", nation: "?", flag: "🏳️", poule: "H" },
+  { id: "teamh2", name: "Équipe H2", nation: "?", flag: "🏳️", poule: "H" },
+  { id: "teamh3", name: "Équipe H3", nation: "?", flag: "🏳️", poule: "H" },
+  { id: "teamh4", name: "Équipe H4", nation: "?", flag: "🏳️", poule: "H" },
 ];
 
 // Heure de coup d'envoi de chaque journée : tous les matchs d'une même
@@ -29,13 +59,21 @@ export const TEAMS = [
 export const JOURNEE_TIMES = { j1: "19:00", j2: "19:30", j3: "20:00" };
 
 // Heures de la phase finale (également communes à tous les matchs du tour).
+// Un tour de huitièmes de finale a été ajouté avant les quarts (32 équipes -> 16 qualifiés).
 export const BRACKET_TIMES = {
-  qf1: "20:30", qf2: "20:30", qf3: "20:30", qf4: "20:30",
-  sf1: "21:00", sf2: "21:00",
-  final: "21:30",
+  hf1: "20:30", hf2: "20:30", hf3: "20:30", hf4: "20:30",
+  hf5: "20:30", hf6: "20:30", hf7: "20:30", hf8: "20:30",
+  qf1: "21:00", qf2: "21:00", qf3: "21:00", qf4: "21:00",
+  sf1: "21:30", sf2: "21:30",
+  final: "22:00",
 };
 
-// order = position du match dans la journée (0 à 7), sert uniquement de repère d'affichage.
+// order = position du match dans la journée, sert uniquement de repère d'affichage.
+// Pour chaque poule de 4 équipes [t1, t2, t3, t4], le planning round-robin est toujours :
+//   j1: t1-t2, t3-t4
+//   j2: t1-t3, t2-t4
+//   j3: t1-t4, t2-t3
+// (chaque équipe joue les 3 autres une fois, réparties sur 3 journées)
 const RAW_MATCHES = {
   j1: [
     ["A", "fcbridje", "maestroland"],
@@ -46,6 +84,14 @@ const RAW_MATCHES = {
     ["C", "kamonlehatay", "skillandchill"],
     ["D", "mathaxfc", "zgueginofc"],
     ["D", "seven", "toyunited"],
+    ["E", "teame1", "teame2"],
+    ["E", "teame3", "teame4"],
+    ["F", "teamf1", "teamf2"],
+    ["F", "teamf3", "teamf4"],
+    ["G", "teamg1", "teamg2"],
+    ["G", "teamg3", "teamg4"],
+    ["H", "teamh1", "teamh2"],
+    ["H", "teamh3", "teamh4"],
   ],
   j2: [
     ["A", "fcbridje", "booster93"],
@@ -56,6 +102,14 @@ const RAW_MATCHES = {
     ["C", "gazahoodfc", "skillandchill"],
     ["D", "mathaxfc", "seven"],
     ["D", "zgueginofc", "toyunited"],
+    ["E", "teame1", "teame3"],
+    ["E", "teame2", "teame4"],
+    ["F", "teamf1", "teamf3"],
+    ["F", "teamf2", "teamf4"],
+    ["G", "teamg1", "teamg3"],
+    ["G", "teamg2", "teamg4"],
+    ["H", "teamh1", "teamh3"],
+    ["H", "teamh2", "teamh4"],
   ],
   j3: [
     ["A", "fcbridje", "fclequipage"],
@@ -66,6 +120,14 @@ const RAW_MATCHES = {
     ["C", "gazahoodfc", "kamonlehatay"],
     ["D", "mathaxfc", "toyunited"],
     ["D", "zgueginofc", "seven"],
+    ["E", "teame1", "teame4"],
+    ["E", "teame2", "teame3"],
+    ["F", "teamf1", "teamf4"],
+    ["F", "teamf2", "teamf3"],
+    ["G", "teamg1", "teamg4"],
+    ["G", "teamg2", "teamg3"],
+    ["H", "teamh1", "teamh4"],
+    ["H", "teamh2", "teamh3"],
   ],
 };
 
@@ -74,7 +136,7 @@ export function buildMatches() {
   Object.entries(RAW_MATCHES).forEach(([journee, list]) => {
     list.forEach((m, idx) => {
       matches.push({
-        id: `${journee}-${m[0].toLowerCase()}${Math.floor(idx / 2) + 1 + (idx % 2 === 0 ? 0 : 0)}-${idx}`,
+        id: `${journee}-${m[0].toLowerCase()}-${idx}`,
         journee,
         poule: m[0],
         order: idx,
@@ -91,11 +153,20 @@ export function buildMatches() {
 }
 
 // Structure de l'arbre de phase finale (calculée dynamiquement à partir des classements)
+// 8 poules -> 16 qualifiés -> un tour de huitièmes de finale a été ajouté avant les quarts.
 export const BRACKET_DEF = {
-  qf1: { label: "Quart de finale 1", from: [["A", 1], ["B", 2]] },
-  qf2: { label: "Quart de finale 2", from: [["C", 1], ["D", 2]] },
-  qf3: { label: "Quart de finale 3", from: [["B", 1], ["A", 2]] },
-  qf4: { label: "Quart de finale 4", from: [["D", 1], ["C", 2]] },
+  hf1: { label: "Huitième de finale 1", from: [["A", 1], ["B", 2]] },
+  hf2: { label: "Huitième de finale 2", from: [["C", 1], ["D", 2]] },
+  hf3: { label: "Huitième de finale 3", from: [["E", 1], ["F", 2]] },
+  hf4: { label: "Huitième de finale 4", from: [["G", 1], ["H", 2]] },
+  hf5: { label: "Huitième de finale 5", from: [["B", 1], ["A", 2]] },
+  hf6: { label: "Huitième de finale 6", from: [["D", 1], ["C", 2]] },
+  hf7: { label: "Huitième de finale 7", from: [["F", 1], ["E", 2]] },
+  hf8: { label: "Huitième de finale 8", from: [["H", 1], ["G", 2]] },
+  qf1: { label: "Quart de finale 1", from: [["hf1"], ["hf2"]] },
+  qf2: { label: "Quart de finale 2", from: [["hf3"], ["hf4"]] },
+  qf3: { label: "Quart de finale 3", from: [["hf5"], ["hf6"]] },
+  qf4: { label: "Quart de finale 4", from: [["hf7"], ["hf8"]] },
   sf1: { label: "Demi-finale 1", from: [["qf1"], ["qf2"]] },
   sf2: { label: "Demi-finale 2", from: [["qf3"], ["qf4"]] },
   final: { label: "Finale", from: [["sf1"], ["sf2"]] },
