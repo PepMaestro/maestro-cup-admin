@@ -8,21 +8,26 @@
 // (ou change-les aussi, du moment qu'ils restent uniques et cohérents avec
 // les ids utilisés dans RAW_MATCHES ci-dessous).
 export const TEAMS = [
+
+    // ---- POULE A (PLACEHOLDER — à renommer) ----
   { id: "fcbridje",      name: "FC Bridje",       nation: "France",            flag: "🇫🇷", poule: "A" },
   { id: "maestroland",   name: "Maestroland",     nation: "France",           flag: "🇫🇷", poule: "A" },
   { id: "booster93",     name: "Booster93",       nation: "France",             flag: "🇫🇷", poule: "A" },
   { id: "fclequipage",   name: "FC L'Équipage",   nation: "France",  flag: "🇫🇷", poule: "A" },
-
+  
+  // ---- POULE B (PLACEHOLDER — à renommer) ----
   { id: "planetewrap",   name: "Planète Wrap",    nation: "France",             flag: "🇫🇷", poule: "B" },
   { id: "cakirfc",       name: "Çakir FC",        nation: "France",             flag: "🇫🇷", poule: "B" },
   { id: "fcfranuits",    name: "FC Franuits",     nation: "France",           flag: "🇫🇷", poule: "B" },
   { id: "fc93",          name: "FC93",            nation: "France",            flag: "🇫🇷", poule: "B" },
-
+  
+  // ---- POULE C (PLACEHOLDER — à renommer) ----
   { id: "fccoubron",     name: "FC Coubron",      nation: "France",             flag: "🇫🇷", poule: "C" },
   { id: "gazahoodfc",    name: "Gazahood FC",     nation: "France",              flag: "🇫🇷", poule: "C" },
   { id: "kamonlehatay",  name: "Kamon le Hatay",  nation: "France",       flag: "🇫🇷", poule: "C" },
   { id: "skillandchill", name: "Skill and Chill", nation: "France",         flag: "🇫🇷", poule: "C" },
-
+  
+  // ---- POULE D (PLACEHOLDER — à renommer) ----
   { id: "mathaxfc",      name: "Mathax FC",       nation: "France",            flag: "🇫🇷", poule: "D" },
   { id: "zgueginofc",    name: "Zguegino FC",     nation: "France",             flag: "🇫🇷", poule: "D" },
   { id: "seven",         name: "7EVEN",           nation: "France",             flag: "🇫🇷", poule: "D" },
@@ -56,16 +61,16 @@ export const TEAMS = [
 // Heure de coup d'envoi de chaque journée : tous les matchs d'une même
 // journée démarrent en même temps (ils se jouent en parallèle sur des
 // consoles différentes), pas les uns après les autres.
-export const JOURNEE_TIMES = { j1: "19:00", j2: "19:30", j3: "20:00" };
+export const JOURNEE_TIMES = { j1: "21:00", j2: "21:25", j3: "21:50" };
 
 // Heures de la phase finale (également communes à tous les matchs du tour).
 // Un tour de huitièmes de finale a été ajouté avant les quarts (32 équipes -> 16 qualifiés).
 export const BRACKET_TIMES = {
-  hf1: "20:30", hf2: "20:30", hf3: "20:30", hf4: "20:30",
-  hf5: "20:30", hf6: "20:30", hf7: "20:30", hf8: "20:30",
-  qf1: "21:00", qf2: "21:00", qf3: "21:00", qf4: "21:00",
-  sf1: "21:30", sf2: "21:30",
-  final: "22:00",
+  hf1: "22:20", hf2: "22:20", hf3: "22:20", hf4: "22:20",
+  hf5: "22:20", hf6: "22:20", hf7: "22:20", hf8: "22:20",
+  qf1: "22:45", qf2: "22:45", qf3: "22:45", qf4: "22:45",
+  sf1: "23:10", sf2: "23:10",
+  final: "23:35",
 };
 
 // order = position du match dans la journée, sert uniquement de repère d'affichage.
