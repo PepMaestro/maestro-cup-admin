@@ -1,0 +1,7 @@
+/* À ajouter dans style.css, par ex. juste après .journee-btn.active { ... } */
+.discord-send-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}

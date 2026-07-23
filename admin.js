@@ -1,6 +1,7 @@
 import { firebaseConfig } from "./firebase-config.js";
 import { buildBracketView, BRACKET_DEF } from "./logic.js";
 import { TEAMS as SEED_TEAMS, buildMatches, BRACKET_TIMES } from "./seed-data.js";
+import { WEBHOOK_URL, POULE_DISCORD } from "./discord-config.js";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -343,6 +344,75 @@ function renderBracketAdminMatch(m) {
       <div class="status-row">${statusBtns}</div>
     </div>`;
 }
+
+/* ---------------- Envoi du programme sur Discord ---------------- */
+// Envoie, pour la journée actuellement sélectionnée dans l'onglet "Matchs de
+// poule" (currentJournee), un message récapitulatif dans le thread de chaque
+// poule : "**Journée X - heure**" suivi de la liste des matchs "équipe vs équipe".
+async function envoyerProgrammeDiscord() {
+  const btn = document.getElementById("discord-send-btn");
+  const statusEl = document.getElementById("discord-send-status");
+  const tById = teamsById();
+  const journee = currentJournee;
+
+  btn.disabled = true;
+  statusEl.textContent = "Envoi en cours…";
+
+  const poules = [...new Set(MATCHES.filter((m) => m.journee === journee).map((m) => m.poule))].sort();
+  let okCount = 0;
+  let errCount = 0;
+
+  for (const poule of poules) {
+    const cfg = POULE_DISCORD[poule];
+    if (!cfg) { errCount++; continue; }
+
+    const matches = MATCHES
+      .filter((m) => m.journee === journee && m.poule === poule)
+      .sort((a, b) => a.order - b.order);
+    if (!matches.length) continue;
+
+    const heure = matches[0].time;
+    const lignes = matches
+      .map((m) => {
+        const a = tById[m.teamA], b = tById[m.teamB];
+        if (!a || !b) return null;
+        return `${a.name} vs ${b.name}`;
+      })
+      .filter(Boolean)
+      .join("\n");
+
+    const content = `<@&${cfg.roleId}>\n**Journée ${journee.replace("j", "")} - ${heure}**\n\n${lignes}`;
+    const url = `${WEBHOOK_URL}?thread_id=${cfg.threadId}`;
+    const payload = {
+      content,
+      allowed_mentions: { parse: [], roles: [cfg.roleId] }, // on autorise uniquement le rôle propre à cette poule
+    };
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.status === 204) okCount++; else errCount++;
+      await new Promise((r) => setTimeout(r, 500)); // évite le rate-limit Discord
+    } catch (e) {
+      console.error(`Poule ${poule} :`, e);
+      errCount++;
+    }
+  }
+
+  statusEl.textContent = errCount === 0
+    ? `Programme envoyé dans ${okCount} poule(s) ✅`
+    : `${okCount} poule(s) OK, ${errCount} erreur(s) — voir la console.`;
+  btn.disabled = false;
+}
+
+document.getElementById("discord-send-btn").addEventListener("click", () => {
+  const journee = currentJournee.replace("j", "");
+  const confirmed = confirm(`Envoyer le programme de la Journée ${journee} dans les threads Discord de chaque poule ?`);
+  if (confirmed) envoyerProgrammeDiscord();
+});
 
 /* ---------------- Initialisation ---------------- */
 document.getElementById("init-btn").addEventListener("click", async () => {
