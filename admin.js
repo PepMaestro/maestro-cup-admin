@@ -130,9 +130,18 @@ function renderAll() {
 const teamsById = () => Object.fromEntries(TEAMS.map((t) => [t.id, t]));
 
 async function updateMatchStatus(matchId, status) {
-  await updateDoc(doc(db, "matches", matchId), { status });
   const m = MATCHES.find((x) => x.id === matchId);
+  const previousStatus = m ? m.status : null;
+
+  await updateDoc(doc(db, "matches", matchId), { status });
   if (m) m.status = status;
+
+  // Envoi auto du résultat dans le thread Discord de la poule,
+  // uniquement au moment où le match PASSE à "finished" (pas si on reclique dessus).
+  if (m && status === "finished" && previousStatus !== "finished") {
+    envoyerResultatMatchDiscord(m);
+  }
+
   renderAll();
 }
 async function updateMatchScore(matchId, scoreA, scoreB) {
@@ -406,6 +415,39 @@ async function envoyerProgrammeDiscord() {
     ? `Programme envoyé dans ${okCount} poule(s) ✅`
     : `${okCount} poule(s) OK, ${errCount} erreur(s) — voir la console.`;
   btn.disabled = false;
+}
+
+/* ---------------- Envoi automatique du résultat sur Discord ---------------- */
+// Déclenché quand un match de poule passe au statut "Terminé" : poste le score
+// dans le thread de la poule concernée en taguant le rôle capitaine de cette poule.
+async function envoyerResultatMatchDiscord(m) {
+  const cfg = POULE_DISCORD[m.poule];
+  if (!cfg) return; // pas de config pour cette poule (ou match de phase finale sans "poule")
+
+  const tById = teamsById();
+  const a = tById[m.teamA], b = tById[m.teamB];
+  if (!a || !b) return;
+
+  const scoreA = m.scoreA ?? "-";
+  const scoreB = m.scoreB ?? "-";
+  const content = `<@&${cfg.roleId}>\n**Résultat — Poule ${m.poule} (Journée ${m.journee.replace("j", "")})**\n\n${a.name} **${scoreA} - ${scoreB}** ${b.name}`;
+
+  const url = `${WEBHOOK_URL}?thread_id=${cfg.threadId}`;
+  const payload = {
+    content,
+    allowed_mentions: { parse: [], roles: [cfg.roleId] },
+  };
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.status !== 204) console.error("Erreur envoi résultat Discord", m.id, res.status);
+  } catch (e) {
+    console.error("Erreur envoi résultat Discord", m.id, e);
+  }
 }
 
 document.getElementById("discord-send-btn").addEventListener("click", () => {
