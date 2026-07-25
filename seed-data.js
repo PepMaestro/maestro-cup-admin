@@ -10,52 +10,52 @@
 export const TEAMS = [
 
     // ---- POULE A (PLACEHOLDER — à renommer) ----
-  { id: "fcbridje",      name: "FC Bridje",       nation: "France",            flag: "🇫🇷", poule: "A" },
-  { id: "maestroland",   name: "Maestroland",     nation: "France",           flag: "🇫🇷", poule: "A" },
-  { id: "booster93",     name: "Booster93",       nation: "France",             flag: "🇫🇷", poule: "A" },
-  { id: "fclequipage",   name: "FC L'Équipage",   nation: "France",  flag: "🇫🇷", poule: "A" },
+  { id: "fcbridje",      name: "MrcommuFc",       nation: "France",            flag: "🇫🇷", poule: "A" },
+  { id: "maestroland",   name: "Samcro 241",     nation: "France",           flag: "🇫🇷", poule: "A" },
+  { id: "booster93",     name: "ZN FC",       nation: "France",             flag: "🇫🇷", poule: "A" },
+  { id: "fclequipage",   name: "Neuille FC",   nation: "France",  flag: "🇫🇷", poule: "A" },
   
   // ---- POULE B (PLACEHOLDER — à renommer) ----
-  { id: "planetewrap",   name: "Planète Wrap",    nation: "France",             flag: "🇫🇷", poule: "B" },
-  { id: "cakirfc",       name: "Çakir FC",        nation: "France",             flag: "🇫🇷", poule: "B" },
-  { id: "fcfranuits",    name: "FC Franuits",     nation: "France",           flag: "🇫🇷", poule: "B" },
-  { id: "fc93",          name: "FC93",            nation: "France",            flag: "🇫🇷", poule: "B" },
+  { id: "planetewrap",   name: "LartisteeFC",    nation: "France",             flag: "🇫🇷", poule: "B" },
+  { id: "cakirfc",       name: "Us Forza",        nation: "France",             flag: "🇫🇷", poule: "B" },
+  { id: "fcfranuits",    name: "Dvrrel FC",     nation: "France",           flag: "🇫🇷", poule: "B" },
+  { id: "fc93",          name: "Rajel Corp",            nation: "France",            flag: "🇫🇷", poule: "B" },
   
   // ---- POULE C (PLACEHOLDER — à renommer) ----
-  { id: "fccoubron",     name: "FC Coubron",      nation: "France",             flag: "🇫🇷", poule: "C" },
-  { id: "gazahoodfc",    name: "Gazahood FC",     nation: "France",              flag: "🇫🇷", poule: "C" },
-  { id: "kamonlehatay",  name: "Kamon le Hatay",  nation: "France",       flag: "🇫🇷", poule: "C" },
-  { id: "skillandchill", name: "Skill and Chill", nation: "France",         flag: "🇫🇷", poule: "C" },
+  { id: "fccoubron",     name: "JOMANGO FC",      nation: "France",             flag: "🇫🇷", poule: "C" },
+  { id: "gazahoodfc",    name: "FC Bridje",     nation: "France",              flag: "🇫🇷", poule: "C" },
+  { id: "kamonlehatay",  name: "MNE FC",  nation: "France",       flag: "🇫🇷", poule: "C" },
+  { id: "skillandchill", name: "Feignon", nation: "France",         flag: "🇫🇷", poule: "C" },
   
   // ---- POULE D (PLACEHOLDER — à renommer) ----
-  { id: "mathaxfc",      name: "Mathax FC",       nation: "France",            flag: "🇫🇷", poule: "D" },
-  { id: "zgueginofc",    name: "Zguegino FC",     nation: "France",             flag: "🇫🇷", poule: "D" },
-  { id: "seven",         name: "7EVEN",           nation: "France",             flag: "🇫🇷", poule: "D" },
-  { id: "toyunited",     name: "Toy United",      nation: "France",            flag: "🇫🇷", poule: "D" },
+  { id: "mathaxfc",      name: "SC PHANTOM",       nation: "France",            flag: "🇫🇷", poule: "D" },
+  { id: "zgueginofc",    name: "Wafflepopiz",     nation: "France",             flag: "🇫🇷", poule: "D" },
+  { id: "seven",         name: "Monoc FC",           nation: "France",             flag: "🇫🇷", poule: "D" },
+  { id: "toyunited",     name: "USMénétrol",      nation: "France",            flag: "🇫🇷", poule: "D" },
 
   // ---- POULE E (PLACEHOLDER — à renommer) ----
-  { id: "teame1", name: "Équipe E1", nation: "France", flag: "🇫🇷", poule: "E" },
-  { id: "teame2", name: "Équipe E2", nation: "France", flag: "🇫🇷", poule: "E" },
-  { id: "teame3", name: "Équipe E3", nation: "France", flag: "🇫🇷", poule: "E" },
-  { id: "teame4", name: "Équipe E4", nation: "France", flag: "🇫🇷", poule: "E" },
+  { id: "teame1", name: "Maestro Land", nation: "France", flag: "🇫🇷", poule: "E" },
+  { id: "teame2", name: "JayjayFC", nation: "France", flag: "🇫🇷", poule: "E" },
+  { id: "teame3", name: "La league78", nation: "France", flag: "🇫🇷", poule: "E" },
+  { id: "teame4", name: "Parara STP", nation: "France", flag: "🇫🇷", poule: "E" },
 
   // ---- POULE F (PLACEHOLDER — à renommer) ----
-  { id: "teamf1", name: "Équipe F1", nation: "France", flag: "🇫🇷", poule: "F" },
-  { id: "teamf2", name: "Équipe F2", nation: "France", flag: "🇫🇷", poule: "F" },
-  { id: "teamf3", name: "Équipe F3", nation: "France", flag: "🇫🇷", poule: "F" },
-  { id: "teamf4", name: "Équipe F4", nation: "France", flag: "🇫🇷", poule: "F" },
+  { id: "teamf1", name: "FC ariouls", nation: "France", flag: "🇫🇷", poule: "F" },
+  { id: "teamf2", name: "Saha Ftourek", nation: "France", flag: "🇫🇷", poule: "F" },
+  { id: "teamf3", name: "UTK NOCTRA", nation: "France", flag: "🇫🇷", poule: "F" },
+  { id: "teamf4", name: "scdr3891", nation: "France", flag: "🇫🇷", poule: "F" },
 
   // ---- POULE G (PLACEHOLDER — à renommer) ----
-  { id: "teamg1", name: "Équipe G1", nation: "France", flag: "🇫🇷", poule: "G" },
-  { id: "teamg2", name: "Équipe G2", nation: "France", flag: "🇫🇷", poule: "G" },
-  { id: "teamg3", name: "Équipe G3", nation: "France", flag: "🇫🇷", poule: "G" },
-  { id: "teamg4", name: "Équipe G4", nation: "France", flag: "🇫🇷", poule: "G" },
+  { id: "teamg1", name: "CapaCold FC", nation: "France", flag: "🇫🇷", poule: "G" },
+  { id: "teamg2", name: "Fc OPS", nation: "France", flag: "🇫🇷", poule: "G" },
+  { id: "teamg3", name: "Toy United", nation: "France", flag: "🇫🇷", poule: "G" },
+  { id: "teamg4", name: "bvball", nation: "France", flag: "🇫🇷", poule: "G" },
 
   // ---- POULE H (PLACEHOLDER — à renommer) ----
-  { id: "teamh1", name: "Équipe H1", nation: "France", flag: "🇫🇷", poule: "H" },
-  { id: "teamh2", name: "Équipe H2", nation: "France", flag: "🇫🇷", poule: "H" },
-  { id: "teamh3", name: "Équipe H3", nation: "France", flag: "🇫🇷", poule: "H" },
-  { id: "teamh4", name: "Équipe H4", nation: "France", flag: "🇫🇷", poule: "H" },
+  { id: "teamh1", name: "XI Babinski", nation: "France", flag: "🇫🇷", poule: "H" },
+  { id: "teamh2", name: "Lustrage FC", nation: "France", flag: "🇫🇷", poule: "H" },
+  { id: "teamh3", name: "7EVEN", nation: "France", flag: "🇫🇷", poule: "H" },
+  { id: "teamh4", name: "sixseven fcb", nation: "France", flag: "🇫🇷", poule: "H" },
 ];
 
 // Heure de coup d'envoi de chaque journée : tous les matchs d'une même
