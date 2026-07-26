@@ -53,7 +53,7 @@ export const TEAMS = [
 
   // ---- POULE H (PLACEHOLDER — à renommer) ----
   { id: "teamh1", name: "XI Babinski", nation: "France", flag: "🇫🇷", poule: "H" },
-  { id: "teamh2", name: "Lustrage FC", nation: "France", flag: "🇫🇷", poule: "H" },
+  { id: "teamh2", name: "Lùstrage FC", nation: "France", flag: "🇫🇷", poule: "H" },
   { id: "teamh3", name: "7EVEN", nation: "France", flag: "🇫🇷", poule: "H" },
   { id: "teamh4", name: "sixseven fcb", nation: "France", flag: "🇫🇷", poule: "H" },
 ];
