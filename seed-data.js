@@ -42,7 +42,7 @@ export const TEAMS = [
   // ---- POULE F (PLACEHOLDER — à renommer) ----
   { id: "teamf1", name: "FC ariouls", nation: "France", flag: "🇫🇷", poule: "F" },
   { id: "teamf2", name: "Saha Ftourek", nation: "France", flag: "🇫🇷", poule: "F" },
-  { id: "teamf3", name: "UTK NOCTRA", nation: "France", flag: "🇫🇷", poule: "F" },
+  { id: "teamf3", name: "Colmar fc", nation: "France", flag: "🇫🇷", poule: "F" },
   { id: "teamf4", name: "scdr3891", nation: "France", flag: "🇫🇷", poule: "F" },
 
   // ---- POULE G (PLACEHOLDER — à renommer) ----
