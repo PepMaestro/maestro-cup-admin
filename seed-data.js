@@ -12,7 +12,7 @@ export const TEAMS = [
     // ---- POULE A (PLACEHOLDER — à renommer) ----
   { id: "fcbridje",      name: "MrcommuFc",       nation: "France",            flag: "🇫🇷", poule: "A" },
   { id: "maestroland",   name: "Samcro 241",     nation: "France",           flag: "🇫🇷", poule: "A" },
-  { id: "booster93",     name: "ZN FC",       nation: "France",             flag: "🇫🇷", poule: "A" },
+  { id: "booster93",     name: "MGA Esport",       nation: "France",             flag: "🇫🇷", poule: "A" },
   { id: "fclequipage",   name: "Neuille FC",   nation: "France",  flag: "🇫🇷", poule: "A" },
   
   // ---- POULE B (PLACEHOLDER — à renommer) ----
