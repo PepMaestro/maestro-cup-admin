@@ -19,7 +19,7 @@ export const TEAMS = [
   { id: "planetewrap",   name: "LartisteeFC",    nation: "France",             flag: "🇫🇷", poule: "B" },
   { id: "cakirfc",       name: "Us Forza",        nation: "France",             flag: "🇫🇷", poule: "B" },
   { id: "fcfranuits",    name: "Dvrrel FC",     nation: "France",           flag: "🇫🇷", poule: "B" },
-  { id: "fc93",          name: "Rajel Corp",            nation: "France",            flag: "🇫🇷", poule: "B" },
+  { id: "fc93",          name: "Crampons troués Fc",            nation: "France",            flag: "🇫🇷", poule: "B" },
   
   // ---- POULE C (PLACEHOLDER — à renommer) ----
   { id: "fccoubron",     name: "JOMANGO FC",      nation: "France",             flag: "🇫🇷", poule: "C" },
