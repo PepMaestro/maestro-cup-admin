@@ -1,5 +1,5 @@
 import { firebaseConfig } from "./firebase-config.js";
-import { buildBracketView, BRACKET_DEF } from "./logic.js";
+import { buildBracketView, BRACKET_DEF, computeStandings } from "./logic.js";
 import { TEAMS as SEED_TEAMS, buildMatches, BRACKET_TIMES } from "./seed-data.js";
 import { WEBHOOK_URL, POULE_DISCORD } from "./discord-config.js";
 
@@ -140,6 +140,7 @@ async function updateMatchStatus(matchId, status) {
   // uniquement au moment où le match PASSE à "finished" (pas si on reclique dessus).
   if (m && status === "finished" && previousStatus !== "finished") {
     envoyerResultatMatchDiscord(m);
+    checkEtEnvoyerClassement(m);
   }
 
   renderAll();
@@ -448,6 +449,53 @@ async function envoyerResultatMatchDiscord(m) {
   } catch (e) {
     console.error("Erreur envoi résultat Discord", m.id, e);
   }
+}
+
+/* ---------------- Envoi auto du classement de poule sur Discord ---------------- */
+// Déclenché quand tous les matchs d'une poule pour UNE journée donnée sont "finished".
+async function envoyerClassementPouleDiscord(poule, journee) {
+  const cfg = POULE_DISCORD[poule];
+  if (!cfg) return;
+
+  const teams = TEAMS.filter((t) => t.poule === poule);
+  const standings = computeStandings(teams, MATCHES);
+
+  const lignes = standings
+    .map((t, i) => `${i + 1}. ${t.flag} ${t.name} — ${t.pts} pts (${t.mj}J ${t.g}G ${t.n}N ${t.p}P, diff ${t.diff >= 0 ? "+" : ""}${t.diff})`)
+    .join("\n");
+
+  const content = `<@&${cfg.roleId}>\n**Classement Poule ${poule} après la Journée ${journee.replace("j", "")}**\n\n${lignes}`;
+  const url = `${WEBHOOK_URL}?thread_id=${cfg.threadId}`;
+  const payload = { content, allowed_mentions: { parse: [], roles: [cfg.roleId] } };
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.status !== 204) console.error("Erreur envoi classement Discord", poule, journee, res.status);
+  } catch (e) {
+    console.error("Erreur envoi classement Discord", poule, journee, e);
+  }
+}
+
+// Vérifie si tous les matchs de la poule+journée du match m sont "finished",
+// et envoie le classement une seule fois (mémorisé dans meta/state).
+async function checkEtEnvoyerClassement(m) {
+  if (!m.poule || !m.journee) return; // sécurité (matchs de bracket n'ont pas ces champs)
+
+  const key = `${m.poule}-${m.journee}`;
+  if (META.classementsEnvoyes && META.classementsEnvoyes[key]) return; // déjà envoyé
+
+  const matchsPouleJournee = MATCHES.filter((x) => x.poule === m.poule && x.journee === m.journee);
+  const complete = matchsPouleJournee.length > 0 && matchsPouleJournee.every((x) => x.status === "finished");
+  if (!complete) return;
+
+  await envoyerClassementPouleDiscord(m.poule, m.journee);
+
+  META.classementsEnvoyes = { ...(META.classementsEnvoyes || {}), [key]: true };
+  await setDoc(doc(db, "meta", "state"), { classementsEnvoyes: META.classementsEnvoyes }, { merge: true });
 }
 
 document.getElementById("discord-send-btn").addEventListener("click", () => {
