@@ -524,7 +524,7 @@ document.getElementById("init-btn").addEventListener("click", async () => {
     Object.keys(BRACKET_DEF).forEach((key) => {
       batch.set(doc(db, "bracket", key), { teamA: null, teamB: null, scoreA: null, scoreB: null, status: "upcoming" });
     });
-    batch.set(doc(db, "meta", "state"), { tournamentActive: false }, { merge: true });
+    batch.set(doc(db, "meta", "state"), { tournamentActive: false, classementsEnvoyes: {} }, { merge: true });
     await batch.commit();
     statusEl.textContent = "Données initialisées avec succès : 32 équipes et 48 matchs de poule créés.";
     fetchAll();
@@ -551,7 +551,7 @@ document.getElementById("reset-btn").addEventListener("click", async () => {
     ]);
     const allDocs = [...teamsSnap.docs, ...matchesSnap.docs, ...bracketSnap.docs];
     await Promise.all(allDocs.map((d) => deleteDoc(d.ref)));
-    await setDoc(doc(db, "meta", "state"), { tournamentActive: false }, { merge: true });
+    await setDoc(doc(db, "meta", "state"), { tournamentActive: false, classementsEnvoyes: {} }, { merge: true });
     statusEl.textContent = `Toutes les données ont été supprimées (${allDocs.length} documents). Tu peux relancer "Initialiser les données".`;
     fetchAll();
   } catch (err) {
