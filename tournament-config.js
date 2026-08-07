@@ -1,4 +1,4 @@
-// Le seul endroit à changer pour switcher de format.
+// Le seul endroit à changer pour switcher de format de tournoi.
 export const MODE = "32"; // "32" ou "16"
 
 const POULES_32 = ["A", "B", "C", "D", "E", "F", "G", "H"];

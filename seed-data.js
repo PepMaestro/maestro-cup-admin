@@ -1,23 +1,131 @@
+// Données initiales de la Maestro Cup FC26
+// Utilisées uniquement par le panel admin pour initialiser Firestore.
+
 import { MODE } from "./tournament-config.js";
 import { BRACKET_DEF } from "./logic.js"; // plus besoin de le dupliquer ici
 
 // ---------------- MODE 32 ÉQUIPES (8 poules) ----------------
+// ⚠️ IMPORTANT : les 16 équipes des poules E, F, G et H ci-dessous sont des
+// PLACEHOLDERS (noms/nations/drapeaux à remplacer). Édite-les avec les vraies
+// équipes AVANT de cliquer sur "Initialiser les données" dans le panel admin.
 const TEAMS_32 = [
-  // ---- POULE A ----
-  { id: "fcbridje",      name: "MrcommuFc",   nation: "France", flag: "🇫🇷", poule: "A" },
-  { id: "maestroland",   name: "Samcro 241",  nation: "France", flag: "🇫🇷", poule: "A" },
-  { id: "booster93",     name: "MGA Esport",  nation: "France", flag: "🇫🇷", poule: "A" },
-  { id: "fclequipage",   name: "Neuille FC",  nation: "France", flag: "🇫🇷", poule: "A" },
-  // ... (garde tout ce que tu as déjà pour B à H, inchangé) ...
+
+  // ---- POULE A (PLACEHOLDER — à renommer) ----
+  { id: "fcbridje",      name: "MrcommuFc",       nation: "France",            flag: "🇫🇷", poule: "A" },
+  { id: "maestroland",   name: "Samcro 241",     nation: "France",           flag: "🇫🇷", poule: "A" },
+  { id: "booster93",     name: "MGA Esport",       nation: "France",             flag: "🇫🇷", poule: "A" },
+  { id: "fclequipage",   name: "Neuille FC",   nation: "France",  flag: "🇫🇷", poule: "A" },
+
+  // ---- POULE B (PLACEHOLDER — à renommer) ----
+  { id: "planetewrap",   name: "LartisteeFC",    nation: "France",             flag: "🇫🇷", poule: "B" },
+  { id: "cakirfc",       name: "Us Forza",        nation: "France",             flag: "🇫🇷", poule: "B" },
+  { id: "fcfranuits",    name: "Dvrrel FC",     nation: "France",           flag: "🇫🇷", poule: "B" },
+  { id: "fc93",          name: "Crampons troués Fc",            nation: "France",            flag: "🇫🇷", poule: "B" },
+
+  // ---- POULE C (PLACEHOLDER — à renommer) ----
+  { id: "fccoubron",     name: "JOMANGO FC",      nation: "France",             flag: "🇫🇷", poule: "C" },
+  { id: "gazahoodfc",    name: "FC Bridje",     nation: "France",              flag: "🇫🇷", poule: "C" },
+  { id: "kamonlehatay",  name: "MNE FC",  nation: "France",       flag: "🇫🇷", poule: "C" },
+  { id: "skillandchill", name: "Feignon", nation: "France",         flag: "🇫🇷", poule: "C" },
+
+  // ---- POULE D (PLACEHOLDER — à renommer) ----
+  { id: "mathaxfc",      name: "SC PHANTOM",       nation: "France",            flag: "🇫🇷", poule: "D" },
+  { id: "zgueginofc",    name: "Wafflepopiz",     nation: "France",             flag: "🇫🇷", poule: "D" },
+  { id: "seven",         name: "Monoc FC",           nation: "France",             flag: "🇫🇷", poule: "D" },
+  { id: "toyunited",     name: "USMénétrol",      nation: "France",            flag: "🇫🇷", poule: "D" },
+
+  // ---- POULE E (PLACEHOLDER — à renommer) ----
+  { id: "teame1", name: "Maestro Land", nation: "France", flag: "🇫🇷", poule: "E" },
+  { id: "teame2", name: "JayjayFC", nation: "France", flag: "🇫🇷", poule: "E" },
+  { id: "teame3", name: "La league78", nation: "France", flag: "🇫🇷", poule: "E" },
+  { id: "teame4", name: "Parara STP", nation: "France", flag: "🇫🇷", poule: "E" },
+
+  // ---- POULE F (PLACEHOLDER — à renommer) ----
+  { id: "teamf1", name: "FC ariouls", nation: "France", flag: "🇫🇷", poule: "F" },
+  { id: "teamf2", name: "Saha Ftourek", nation: "France", flag: "🇫🇷", poule: "F" },
+  { id: "teamf3", name: "Colmar fc", nation: "France", flag: "🇫🇷", poule: "F" },
+  { id: "teamf4", name: "scdr3891", nation: "France", flag: "🇫🇷", poule: "F" },
+
+  // ---- POULE G (PLACEHOLDER — à renommer) ----
+  { id: "teamg1", name: "CapaCold FC", nation: "France", flag: "🇫🇷", poule: "G" },
+  { id: "teamg2", name: "Fc OPS", nation: "France", flag: "🇫🇷", poule: "G" },
+  { id: "teamg3", name: "Toy United", nation: "France", flag: "🇫🇷", poule: "G" },
+  { id: "teamg4", name: "bvball", nation: "France", flag: "🇫🇷", poule: "G" },
+
+  // ---- POULE H (PLACEHOLDER — à renommer) ----
+  { id: "teamh1", name: "XI Babinski", nation: "France", flag: "🇫🇷", poule: "H" },
+  { id: "teamh2", name: "Lùstrage FC", nation: "France", flag: "🇫🇷", poule: "H" },
+  { id: "teamh3", name: "7EVEN", nation: "France", flag: "🇫🇷", poule: "H" },
+  { id: "teamh4", name: "sixseven fcb", nation: "France", flag: "🇫🇷", poule: "H" },
 ];
 
+// order = position du match dans la journée, sert uniquement de repère d'affichage.
+// Pour chaque poule de 4 équipes [t1, t2, t3, t4], le planning round-robin est toujours :
+//   j1: t1-t2, t3-t4
+//   j2: t1-t3, t2-t4
+//   j3: t1-t4, t2-t3
+// (chaque équipe joue les 3 autres une fois, réparties sur 3 journées)
 const RAW_MATCHES_32 = {
-  j1: [ /* ... tout ce que tu as déjà pour j1, 8 poules ... */ ],
-  j2: [ /* ... idem j2 ... */ ],
-  j3: [ /* ... idem j3 ... */ ],
+  j1: [
+    ["A", "fcbridje", "maestroland"],
+    ["A", "booster93", "fclequipage"],
+    ["B", "planetewrap", "cakirfc"],
+    ["B", "fcfranuits", "fc93"],
+    ["C", "fccoubron", "gazahoodfc"],
+    ["C", "kamonlehatay", "skillandchill"],
+    ["D", "mathaxfc", "zgueginofc"],
+    ["D", "seven", "toyunited"],
+    ["E", "teame1", "teame2"],
+    ["E", "teame3", "teame4"],
+    ["F", "teamf1", "teamf2"],
+    ["F", "teamf3", "teamf4"],
+    ["G", "teamg1", "teamg2"],
+    ["G", "teamg3", "teamg4"],
+    ["H", "teamh1", "teamh2"],
+    ["H", "teamh3", "teamh4"],
+  ],
+  j2: [
+    ["A", "fcbridje", "booster93"],
+    ["A", "maestroland", "fclequipage"],
+    ["B", "planetewrap", "fcfranuits"],
+    ["B", "cakirfc", "fc93"],
+    ["C", "fccoubron", "kamonlehatay"],
+    ["C", "gazahoodfc", "skillandchill"],
+    ["D", "mathaxfc", "seven"],
+    ["D", "zgueginofc", "toyunited"],
+    ["E", "teame1", "teame3"],
+    ["E", "teame2", "teame4"],
+    ["F", "teamf1", "teamf3"],
+    ["F", "teamf2", "teamf4"],
+    ["G", "teamg1", "teamg3"],
+    ["G", "teamg2", "teamg4"],
+    ["H", "teamh1", "teamh3"],
+    ["H", "teamh2", "teamh4"],
+  ],
+  j3: [
+    ["A", "fcbridje", "fclequipage"],
+    ["A", "maestroland", "booster93"],
+    ["B", "planetewrap", "fc93"],
+    ["B", "cakirfc", "fcfranuits"],
+    ["C", "fccoubron", "skillandchill"],
+    ["C", "gazahoodfc", "kamonlehatay"],
+    ["D", "mathaxfc", "toyunited"],
+    ["D", "zgueginofc", "seven"],
+    ["E", "teame1", "teame4"],
+    ["E", "teame2", "teame3"],
+    ["F", "teamf1", "teamf4"],
+    ["F", "teamf2", "teamf3"],
+    ["G", "teamg1", "teamg4"],
+    ["G", "teamg2", "teamg3"],
+    ["H", "teamh1", "teamh4"],
+    ["H", "teamh2", "teamh3"],
+  ],
 };
 
 // ---------------- MODE 16 ÉQUIPES (4 poules) ----------------
+// PLACEHOLDER — édite ces 16 équipes (noms/nations/drapeaux) avant d'utiliser
+// ce mode. Garde les `id` uniques (ou change-les, du moment qu'ils restent
+// cohérents avec RAW_MATCHES_16 ci-dessous).
 const TEAMS_16 = [
   // ---- POULE A ----
   { id: "t16-a1", name: "Équipe A1", nation: "France", flag: "🇫🇷", poule: "A" },
@@ -68,7 +176,9 @@ const RAW_MATCHES_16 = {
 export const TEAMS = MODE === "16" ? TEAMS_16 : TEAMS_32;
 const RAW_MATCHES = MODE === "16" ? RAW_MATCHES_16 : RAW_MATCHES_32;
 
-// Heure de coup d'envoi de chaque journée (inchangé, commun aux deux modes)
+// Heure de coup d'envoi de chaque journée : tous les matchs d'une même
+// journée démarrent en même temps (ils se jouent en parallèle sur des
+// consoles différentes), pas les uns après les autres.
 export const JOURNEE_TIMES = { j1: "21:00", j2: "21:25", j3: "21:50" };
 
 // Heures de la phase finale — les clés hf1-hf8 restent définies mais ne sont
@@ -95,12 +205,13 @@ export function buildMatches() {
         teamB: m[2],
         scoreA: null,
         scoreB: null,
-        status: "upcoming",
+        status: "upcoming", // upcoming | live | finished
       });
     });
   });
   return matches;
 }
 
-// BRACKET_DEF n'est plus défini ici : il vient de logic.js (généré dynamiquement)
+// BRACKET_DEF n'est plus défini ici : il vient de logic.js (généré dynamiquement
+// à partir du nombre de poules en config).
 export { BRACKET_DEF };
