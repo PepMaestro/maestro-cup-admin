@@ -1,5 +1,5 @@
 import { firebaseConfig } from "./firebase-config.js";
-import { buildBracketView, BRACKET_DEF, computeStandings } from "./logic.js";
+import { buildBracketView, BRACKET_DEF, computeStandings, getBracketRounds } from "./logic.js";
 import { TEAMS as SEED_TEAMS, buildMatches, BRACKET_TIMES } from "./seed-data.js";
 import { WEBHOOK_URL, POULE_DISCORD } from "./discord-config.js";
 
@@ -287,12 +287,7 @@ function renderPenalites() {
 /* ---------------- Phase finale ---------------- */
 function renderBracketAdmin() {
   const { bracket } = buildBracketView(TEAMS, MATCHES, BRACKET);
-  const rounds = [
-    { title: "Huitièmes de finale", keys: ["hf1", "hf2", "hf3", "hf4", "hf5", "hf6", "hf7", "hf8"] },
-    { title: "Quarts de finale", keys: ["qf1", "qf2", "qf3", "qf4"] },
-    { title: "Demi-finales", keys: ["sf1", "sf2"] },
-    { title: "Finale", keys: ["final"] },
-  ];
+  const rounds = getBracketRounds(BRACKET_DEF);
 
   const el = document.getElementById("bracket-admin");
   el.innerHTML = rounds.map((round) => `
