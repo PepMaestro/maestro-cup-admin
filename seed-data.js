@@ -128,25 +128,25 @@ const RAW_MATCHES_32 = {
 // cohérents avec RAW_MATCHES_16 ci-dessous).
 const TEAMS_16 = [
   // ---- POULE A ----
-  { id: "t16-a1", name: "Équipe A1", nation: "France", flag: "🇫🇷", poule: "A" },
-  { id: "t16-a2", name: "Équipe A2", nation: "France", flag: "🇫🇷", poule: "A" },
-  { id: "t16-a3", name: "Équipe A3", nation: "France", flag: "🇫🇷", poule: "A" },
-  { id: "t16-a4", name: "Équipe A4", nation: "France", flag: "🇫🇷", poule: "A" },
+  { id: "t16-a1", name: "FC Bridje", nation: "France", flag: "🇫🇷", poule: "A" },
+  { id: "t16-a2", name: "MATA FOOT A", nation: "France", flag: "🇫🇷", poule: "A" },
+  { id: "t16-a3", name: "Fc Ops", nation: "France", flag: "🇫🇷", poule: "A" },
+  { id: "t16-a4", name: "Samcro241", nation: "France", flag: "🇫🇷", poule: "A" },
   // ---- POULE B ----
-  { id: "t16-b1", name: "Équipe B1", nation: "France", flag: "🇫🇷", poule: "B" },
-  { id: "t16-b2", name: "Équipe B2", nation: "France", flag: "🇫🇷", poule: "B" },
-  { id: "t16-b3", name: "Équipe B3", nation: "France", flag: "🇫🇷", poule: "B" },
-  { id: "t16-b4", name: "Équipe B4", nation: "France", flag: "🇫🇷", poule: "B" },
+  { id: "t16-b1", name: "Maestroland", nation: "France", flag: "🇫🇷", poule: "B" },
+  { id: "t16-b2", name: "Mr commu fc", nation: "France", flag: "🇫🇷", poule: "B" },
+  { id: "t16-b3", name: "Monoc FC", nation: "France", flag: "🇫🇷", poule: "B" },
+  { id: "t16-b4", name: "Mr commu fc 2", nation: "France", flag: "🇫🇷", poule: "B" },
   // ---- POULE C ----
-  { id: "t16-c1", name: "Équipe C1", nation: "France", flag: "🇫🇷", poule: "C" },
-  { id: "t16-c2", name: "Équipe C2", nation: "France", flag: "🇫🇷", poule: "C" },
-  { id: "t16-c3", name: "Équipe C3", nation: "France", flag: "🇫🇷", poule: "C" },
-  { id: "t16-c4", name: "Équipe C4", nation: "France", flag: "🇫🇷", poule: "C" },
+  { id: "t16-c1", name: "FC muslim 92", nation: "France", flag: "🇫🇷", poule: "C" },
+  { id: "t16-c2", name: "Lùstrage FC", nation: "France", flag: "🇫🇷", poule: "C" },
+  { id: "t16-c3", name: "Fc secteur 382", nation: "France", flag: "🇫🇷", poule: "C" },
+  { id: "t16-c4", name: "PFC MTP 1994", nation: "France", flag: "🇫🇷", poule: "C" },
   // ---- POULE D ----
-  { id: "t16-d1", name: "Équipe D1", nation: "France", flag: "🇫🇷", poule: "D" },
-  { id: "t16-d2", name: "Équipe D2", nation: "France", flag: "🇫🇷", poule: "D" },
-  { id: "t16-d3", name: "Équipe D3", nation: "France", flag: "🇫🇷", poule: "D" },
-  { id: "t16-d4", name: "Équipe D4", nation: "France", flag: "🇫🇷", poule: "D" },
+  { id: "t16-d1", name: "JAYJAY AS", nation: "France", flag: "🇫🇷", poule: "D" },
+  { id: "t16-d2", name: "FC GONTRAN", nation: "France", flag: "🇫🇷", poule: "D" },
+  { id: "t16-d3", name: "Lùstrage FC 2", nation: "France", flag: "🇫🇷", poule: "D" },
+  { id: "t16-d4", name: "Mata foot fcc", nation: "France", flag: "🇫🇷", poule: "D" },
 ];
 
 // Même principe round-robin que pour le mode 32 : pour chaque poule [t1,t2,t3,t4]
